@@ -26,7 +26,7 @@ class SpeechToText:
                 try:
                     chunk = self.recognizer.recognize_google(audio)
                     print(chunk)
-                    self.text += chunk
+                    self.text += chunk + ". "
                 except sr.UnknownValueError:
                     print("Google Speech Recognition could not understand audio")
                 except sr.RequestError as e:
@@ -39,8 +39,8 @@ class SpeechToText:
 
         with sr.Microphone() as source:
             try:
+                self.recognizer.adjust_for_ambient_noise(source)
                 while True:
-                    self.recognizer.adjust_for_ambient_noise(source)
                     self.audio_queue.put(self.recognizer.listen(source))
             except KeyboardInterrupt:
                 pass
